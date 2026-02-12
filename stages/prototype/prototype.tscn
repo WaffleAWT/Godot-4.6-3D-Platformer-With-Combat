@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://b2pjv3sy5hu5w"]
+
+[ext_resource type="Script" uid="uid://bafxpbpic5so5" path="res://stages/prototype/scripts/prototype.gd" id="1_5kwao"]
+[ext_resource type="Texture2D" uid="uid://bofnarf2ys68m" path="res://stages/prototype/art/black.png" id="1_erxa5"]
+[ext_resource type="Texture2D" uid="uid://bbshgiql6mruj" path="res://stages/prototype/art/sky.png" id="2_65t83"]
+[ext_resource type="PackedScene" uid="uid://c5px88knq1ng" path="res://entities/player/player.tscn" id="2_ljefa"]
+[ext_resource type="Texture2D" uid="uid://ixoanl4xln7o" path="res://stages/prototype/art/green.png" id="3_mwv38"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_ac262"]
+panorama = ExtResource("2_65t83")
+
+[sub_resource type="Sky" id="Sky_5kwao"]
+sky_material = SubResource("PanoramaSkyMaterial_ac262")
+
+[sub_resource type="Environment" id="Environment_mwv38"]
+background_mode = 2
+sky = SubResource("Sky_5kwao")
+tonemap_mode = 2
+glow_enabled = true
+glow_bloom = 0.1
+glow_blend_mode = 0
+adjustment_enabled = true
+adjustment_brightness = 1.05
+adjustment_contrast = 1.1
+adjustment_saturation = 1.1
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ljefa"]
+size = Vector2(128, 128)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5kwao"]
+albedo_texture = ExtResource("1_erxa5")
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_ljefa"]
+points = PackedVector3Array(-64, 0, -64, -64, 0, 64, 64, 0, -64, 64, 0, 64)
+
+[sub_resource type="PrismMesh" id="PrismMesh_5kwao"]
+left_to_right = 2.0
+size = Vector3(2, 2, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mwv38"]
+albedo_texture = ExtResource("3_mwv38")
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_mwv38"]
+points = PackedVector3Array(3, 1, 1, 3, 1, -1, -1, -1, 1, 1, -1, 1, 1, -1, -1, -1, -1, -1)
+
+[node name="Prototype" type="Node3D" unique_id=142840146]
+script = ExtResource("1_5kwao")
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1680286682]
+environment = SubResource("Environment_mwv38")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=685155682]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="." unique_id=276375948]
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=1602915357]
+mesh = SubResource("PlaneMesh_ljefa")
+surface_material_override/0 = SubResource("StandardMaterial3D_5kwao")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=613304942]
+shape = SubResource("ConvexPolygonShape3D_ljefa")
+
+[node name="Slope" type="StaticBody3D" parent="." unique_id=1889998854]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 1, -5)
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Slope" unique_id=20818886]
+mesh = SubResource("PrismMesh_5kwao")
+surface_material_override/0 = SubResource("StandardMaterial3D_mwv38")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Slope" unique_id=261256052]
+shape = SubResource("ConvexPolygonShape3D_mwv38")
+
+[node name="Player" parent="." unique_id=1854892562 instance=ExtResource("2_ljefa")]
